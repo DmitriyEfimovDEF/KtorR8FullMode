@@ -13,3 +13,15 @@
 .externalNativeBuild
 .cxx
 local.properties
+# Default ignored files
+/shelf/
+/workspace.xml
+# CodeStream ignored files
+/codestream.xml
+/.idea/.gitignore
+/.idea/compiler.xml
+/.idea/gradle.xml
+/gradle/wrapper/gradle-wrapper.jar
+/gradle/wrapper/gradle-wrapper.properties
+/.idea/misc.xml
+/.idea/vcs.xml
