@@ -16,14 +16,14 @@ import kotlinx.coroutines.launch
 class MainViewModel : ViewModel() {
 
     private val parameter = MutableStateFlow("")
-    private val total = MutableStateFlow("")
-    private val client = ktorClient { all -> total.tryEmit(all) }
+    private val requestInfo = MutableStateFlow(RequestUrl)
+    private val client = ktorClient { all -> requestInfo.tryEmit(all) }
 
     val state = combine(
         parameter,
-        total
-    ) { param, body ->
-        RequestState(body, param)
+        requestInfo
+    ) { param, request ->
+        RequestState(request, param)
     }
 
     fun onParamChanged(p: String) {
@@ -46,8 +46,15 @@ class MainViewModel : ViewModel() {
 
 @Immutable
 data class RequestState(
-    val requestFact: String = "",
+    val requestInfo: String = "",
     val requestParam: String = "",
-)
+) {
+    companion object {
+        val Initial = RequestState(
+            requestInfo = "Request info",
+            requestParam = ""
+        )
+    }
+}
 
 const val RequestUrl: String = "https://www.google.com/search"

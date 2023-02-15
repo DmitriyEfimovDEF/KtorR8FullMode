@@ -38,19 +38,21 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                 ) {
                     val vm by viewModels<MainViewModel>()
-                    val state = vm.state.collectAsState(RequestState())
+                    val state = vm.state.collectAsState(RequestState.Initial)
+
                     Column(
                         modifier = Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
+
                         Box(
                             modifier = Modifier
                                 .weight(1F)
                                 .verticalScroll(rememberScrollState()),
                         ) {
                             Text(
-                                text = state.value.requestFact,
+                                text = state.value.requestInfo,
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .align(Alignment.BottomStart)
@@ -59,6 +61,9 @@ class MainActivity : ComponentActivity() {
 
                         TextField(
                             value = state.value.requestParam,
+                            label = {
+                                Text(text = "input parameter string or number")
+                            },
                             onValueChange = vm::onParamChanged,
                             textStyle = MaterialTheme.typography.bodyMedium,
                             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
