@@ -33,7 +33,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun sendRequest() {
-        sendInlined()
+        sendWithoutInline()
     }
 
     private fun sendInlined() {
@@ -41,8 +41,7 @@ class MainViewModel : ViewModel() {
             client.get(
                 RequestUrl,
                 buildMap {
-                    put("page", 1)
-                    put("species__name", parameter.value)
+                    put("q", parameter.value)
                 }
             )
         }
@@ -54,8 +53,7 @@ class MainViewModel : ViewModel() {
                 method = HttpMethod.Get
                 url {
                     takeFrom(RequestUrl)
-                    parameter("page", 1)
-                    parameter("species__name", parameter.value)
+                    parameter("q", parameter.value)
                 }
             }
             client.request(request)
@@ -69,4 +67,4 @@ data class RequestState(
     val requestParam: String = "",
 )
 
-const val RequestUrl: String = "http://158.160.56.133/app/pet"
+const val RequestUrl: String = "https://www.google.com/search"
