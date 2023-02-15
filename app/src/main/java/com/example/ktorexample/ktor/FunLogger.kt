@@ -1,4 +1,4 @@
-package com.example.ktorexample
+package com.example.ktorexample.ktor
 
 import io.ktor.client.plugins.logging.Logger
 
