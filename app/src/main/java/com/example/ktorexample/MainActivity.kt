@@ -20,18 +20,24 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktorexample.ui.theme.KtorExampleTheme
-import io.ktor.client.request.get
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
+import io.ktor.client.request.request
+import io.ktor.http.HttpMethod
+import io.ktor.http.takeFrom
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalComposeUiApi::class)
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,12 +81,9 @@ class MainActivity : ComponentActivity() {
 
 class ExampleViewModel : ViewModel() {
 
-
     private val parameter = MutableStateFlow("")
     private val total = MutableStateFlow("")
-    private val client = ktorClient { all ->
-        total.tryEmit(all)
-    }
+    private val client = ktorClient { all -> total.tryEmit(all) }
 
     val state = combine(
         parameter,
@@ -95,10 +98,19 @@ class ExampleViewModel : ViewModel() {
 
     fun sendRequest() {
         viewModelScope.launch {
-            client.get(RequestUrl) {
-                parameter("page", 1)
-                parameter("species__name", parameter.value)
+            val request: HttpRequestBuilder.() -> Unit = {
+                method = HttpMethod.Get
+                url {
+                    takeFrom(RequestUrl)
+                    parameter("page", 1)
+                    parameter("species__name", parameter.value)
+                }
             }
+            client.request(request).body()
+//            client.client.get(RequestUrl) {
+//                parameter("page", 1)
+//                parameter("species__name", parameter.value)
+//            }
         }
     }
 }
@@ -109,4 +121,4 @@ data class RequestState(
     val requestParam: String = "",
 )
 
-const val RequestUrl = "http://158.160.56.133/app/pet"
+const val RequestUrl: String = "http://158.160.56.133/app/pet"

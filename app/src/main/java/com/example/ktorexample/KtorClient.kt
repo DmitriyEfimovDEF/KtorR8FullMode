@@ -30,7 +30,7 @@ fun ktorClient(logAction: (String) -> Unit) = HttpClient(Android) {
             Log.v("Logger Ktor =>", msg)
             logAction.invoke(msg)
         }
-        level = LogLevel.ALL
+        level = LogLevel.INFO
     }
 
     install(ResponseObserver) {
@@ -38,10 +38,10 @@ fun ktorClient(logAction: (String) -> Unit) = HttpClient(Android) {
             Log.d("HTTP status:", "${response.status.value}")
         }
     }
-
-    install(DefaultRequest) {
-        header(HttpHeaders.ContentType, ContentType.Application.Json)
-    }
+//
+//    install(DefaultRequest) {
+//        header(HttpHeaders.ContentType, ContentType.Application.Json)
+//    }
 }
 
 fun interface FunLogger : Logger {
