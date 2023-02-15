@@ -3,7 +3,6 @@ package com.example.ktorexample
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ktorexample.ktor.get
 import com.example.ktorexample.ktor.ktorClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
@@ -13,7 +12,6 @@ import io.ktor.http.takeFrom
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-
 
 class MainViewModel : ViewModel() {
 
@@ -33,21 +31,6 @@ class MainViewModel : ViewModel() {
     }
 
     fun sendRequest() {
-        sendWithoutInline()
-    }
-
-    private fun sendInlined() {
-        viewModelScope.launch {
-            client.get(
-                RequestUrl,
-                buildMap {
-                    put("q", parameter.value)
-                }
-            )
-        }
-    }
-
-    private fun sendWithoutInline() {
         viewModelScope.launch {
             val request: HttpRequestBuilder.() -> Unit = {
                 method = HttpMethod.Get
