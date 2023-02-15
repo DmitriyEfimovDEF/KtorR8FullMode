@@ -20,14 +20,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ktorexample.ui.theme.KtorExampleTheme
-import io.ktor.client.call.body
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.parameter
 import io.ktor.client.request.request
@@ -37,8 +35,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalComposeUiApi::class)
 class MainActivity : ComponentActivity() {
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,6 +95,22 @@ class ExampleViewModel : ViewModel() {
     }
 
     fun sendRequest() {
+        sendInlined()
+    }
+
+    private fun sendInlined() {
+        viewModelScope.launch {
+            client.get(
+                RequestUrl,
+                mapOf(
+                    "page" to 1,
+                    "species__name" to parameter.value
+                )
+            )
+        }
+    }
+
+    private fun sendWithoutInline() {
         viewModelScope.launch {
             val request: HttpRequestBuilder.() -> Unit = {
                 method = HttpMethod.Get
@@ -106,11 +120,7 @@ class ExampleViewModel : ViewModel() {
                     parameter("species__name", parameter.value)
                 }
             }
-            client.request(request).body()
-//            client.client.get(RequestUrl) {
-//                parameter("page", 1)
-//                parameter("species__name", parameter.value)
-//            }
+            client.request(request)
         }
     }
 }

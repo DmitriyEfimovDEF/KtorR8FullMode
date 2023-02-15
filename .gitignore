@@ -1,12 +1,8 @@
 *.iml
 .gradle
+.idea
+/.idea/kotlinc.xml
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
 .DS_Store
 /build
 /captures
@@ -18,11 +14,6 @@ local.properties
 /workspace.xml
 # CodeStream ignored files
 /codestream.xml
-/.idea/.gitignore
-/.idea/compiler.xml
-/.idea/gradle.xml
 /gradle/wrapper/gradle-wrapper.jar
 /gradle/wrapper/gradle-wrapper.properties
-/.idea/misc.xml
-/.idea/vcs.xml
 /KtorExample.zip
